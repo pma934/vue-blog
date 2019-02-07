@@ -1,0 +1,19 @@
+{
+  "github_username": "pma934",
+  "github_perpage": 5,
+  "github_percomments": 1,
+  "ClientID": {
+    "development": "becf2ccd805bbd02704f",
+    "production": "ca59308e4fb0e9315900"
+  },
+  "ClientSecret": {
+    "development": "954d24e4d14633a8918c94d1f84a63b2809b50d3",
+    "production": "18412ef16d5a3dd246be41719f70a3f268bdd52d"
+  },
+  "proxyTable": {
+    "github": {
+      "development": "github",
+      "production": "https://github.com"
+    }
+  }
+}
