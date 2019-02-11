@@ -1,24 +1,53 @@
 <template>
-  <div id="Live2D">
-    <div class="live2d">
-      <canvas id="live2d_canvas" width="400" height="500"></canvas>
-    </div>
-    <div class="buttons">
-      <span @click="pio()" class="qiehuan"></span>
-      <span @click="save_pio()" class="jietu"></span>
-      <span class="gotop"></span>
-      <span class="hidden"></span>
-      <span>@</span>
-      <span>@</span>
+  <div>
+    <span @click="toggle()" id="show" v-show="!showlive2d" title="显示"></span>
+    <div id="Live2D" v-show="showlive2d">
+      <div class="live2d">
+        <canvas id="live2d_canvas" width="400" height="500"></canvas>
+      </div>
+      <div class="buttons">
+        <span @click="pio()" class="qiehuan" title="换装"></span>
+        <span @click="save_pio()" class="jietu" title="保存图片"></span>
+        <span @click="gotop()" class="gotop" title="回到顶部"></span>
+        <span @click="toggle()" class="hidden" title="隐藏"></span>
+        <span @click="swbg()" class="swbg" title="切换背景"></span>
+      </div>
     </div>
   </div>
 </template>
 
 <script>
+  import {
+    live2dModel
+  } from '../assets/js/live2dModel.js'
+  require('../assets/js/live2d.min.js')
+
   export default {
     name: 'Live2D',
+    data() {
+      return {
+        showlive2d: true,
+      }
+    },
     methods: {
-
+      pio: function () {
+        let Model = live2dModel();
+        window.Live2D_img_path = Model.img
+        loadlive2d("live2d_canvas", Model.model);
+      },
+      save_pio: function () {
+        window.Live2D.captureName = 'Screenshot-' + Date.now() + '.png';
+        window.Live2D.captureFrame = true;
+      },
+      gotop: function () {
+        scrollTo(0, 0)
+      },
+      toggle: function () {
+        this.showlive2d = !this.showlive2d
+      },
+      swbg: function () {
+        this.$emit('swbg')
+      }
     },
     mounted: function () {
       this.pio();
@@ -30,14 +59,15 @@
 <style scoped>
   .live2d {
     width: 300px;
-    height: 300px;
+    height: 400px;
     position: relative;
     cursor: pointer;
+    overflow: hidden;
   }
 
   .buttons {
     position: absolute;
-    top: 70px;
+    top: 170px;
     left: 200px;
     display: none;
   }
@@ -78,215 +108,39 @@
     content: "\e106";
   }
 
+  .buttons .swbg:before {
+    content: "\e060"
+  }
+
   #live2d_canvas {
     position: absolute;
-    top: -47px;
-    left: -50px;
+    top: 53px;
+    left: -40px;
     width: 320px;
     height: 400px;
   }
 
-  @keyframes shake {
-    2% {
-      transform: translate(0.5px, -1.5px) rotate(-0.5deg);
-    }
+  #show {
+    position: absolute;
+    top: -80px;
+    left: -100px;
+    padding: 2px 3.25px;
+    background-color: #fff;
+    font-family: 'Glyphicons Halflings';
+    border: 2px solid rgb(57, 57, 57);
+    animation: shake 30s infinite ease-in-out;
+  }
 
-    4% {
-      transform: translate(0.5px, 1.5px) rotate(1.5deg);
-    }
+  #show:before {
+    content: "\e105";
+  }
 
-    6% {
-      transform: translate(1.5px, 1.5px) rotate(1.5deg);
-    }
-
-    8% {
-      transform: translate(2.5px, 1.5px) rotate(0.5deg);
-    }
-
-    10% {
-      transform: translate(0.5px, 2.5px) rotate(0.5deg);
-    }
-
-    12% {
-      transform: translate(1.5px, 1.5px) rotate(0.5deg);
-    }
-
-    14% {
-      transform: translate(0.5px, 0.5px) rotate(0.5deg);
-    }
-
-    16% {
-      transform: translate(-1.5px, -0.5px) rotate(1.5deg);
-    }
-
-    18% {
-      transform: translate(0.5px, 0.5px) rotate(1.5deg);
-    }
-
-    20% {
-      transform: translate(2.5px, 2.5px) rotate(1.5deg);
-    }
-
-    22% {
-      transform: translate(0.5px, -1.5px) rotate(1.5deg);
-    }
-
-    24% {
-      transform: translate(-1.5px, 1.5px) rotate(-0.5deg);
-    }
-
-    26% {
-      transform: translate(1.5px, 0.5px) rotate(1.5deg);
-    }
-
-    28% {
-      transform: translate(-0.5px, -0.5px) rotate(-0.5deg);
-    }
-
-    30% {
-      transform: translate(1.5px, -0.5px) rotate(-0.5deg);
-    }
-
-    32% {
-      transform: translate(2.5px, -1.5px) rotate(1.5deg);
-    }
-
-    34% {
-      transform: translate(2.5px, 2.5px) rotate(-0.5deg);
-    }
-
-    36% {
-      transform: translate(0.5px, -1.5px) rotate(0.5deg);
-    }
-
-    38% {
-      transform: translate(2.5px, -0.5px) rotate(-0.5deg);
-    }
-
-    40% {
-      transform: translate(-0.5px, 2.5px) rotate(0.5deg);
-    }
-
-    42% {
-      transform: translate(-1.5px, 2.5px) rotate(0.5deg);
-    }
-
-    44% {
-      transform: translate(-1.5px, 1.5px) rotate(0.5deg);
-    }
-
-    46% {
-      transform: translate(1.5px, -0.5px) rotate(-0.5deg);
-    }
-
-    48% {
-      transform: translate(2.5px, -0.5px) rotate(0.5deg);
-    }
-
-    50% {
-      transform: translate(-1.5px, 1.5px) rotate(0.5deg);
-    }
-
-    52% {
-      transform: translate(-0.5px, 1.5px) rotate(0.5deg);
-    }
-
-    54% {
-      transform: translate(-1.5px, 1.5px) rotate(0.5deg);
-    }
-
-    56% {
-      transform: translate(0.5px, 2.5px) rotate(1.5deg);
-    }
-
-    58% {
-      transform: translate(2.5px, 2.5px) rotate(0.5deg);
-    }
-
-    60% {
-      transform: translate(2.5px, -1.5px) rotate(1.5deg);
-    }
-
-    62% {
-      transform: translate(-1.5px, 0.5px) rotate(1.5deg);
-    }
-
-    64% {
-      transform: translate(-1.5px, 1.5px) rotate(1.5deg);
-    }
-
-    66% {
-      transform: translate(0.5px, 2.5px) rotate(1.5deg);
-    }
-
-    68% {
-      transform: translate(2.5px, -1.5px) rotate(1.5deg);
-    }
-
-    70% {
-      transform: translate(2.5px, 2.5px) rotate(0.5deg);
-    }
-
-    72% {
-      transform: translate(-0.5px, -1.5px) rotate(1.5deg);
-    }
-
-    74% {
-      transform: translate(-1.5px, 2.5px) rotate(1.5deg);
-    }
-
-    76% {
-      transform: translate(-1.5px, 2.5px) rotate(1.5deg);
-    }
-
-    78% {
-      transform: translate(-1.5px, 2.5px) rotate(0.5deg);
-    }
-
-    80% {
-      transform: translate(-1.5px, 0.5px) rotate(-0.5deg);
-    }
-
-    82% {
-      transform: translate(-1.5px, 0.5px) rotate(-0.5deg);
-    }
-
-    84% {
-      transform: translate(-0.5px, 0.5px) rotate(1.5deg);
-    }
-
-    86% {
-      transform: translate(2.5px, 1.5px) rotate(0.5deg);
-    }
-
-    88% {
-      transform: translate(-1.5px, 0.5px) rotate(1.5deg);
-    }
-
-    90% {
-      transform: translate(-1.5px, -0.5px) rotate(-0.5deg);
-    }
-
-    92% {
-      transform: translate(-1.5px, -1.5px) rotate(1.5deg);
-    }
-
-    94% {
-      transform: translate(0.5px, 0.5px) rotate(-0.5deg);
-    }
-
-    96% {
-      transform: translate(2.5px, -0.5px) rotate(-0.5deg);
-    }
-
-    98% {
-      transform: translate(-1.5px, -1.5px) rotate(-0.5deg);
-    }
-
-    0%,
-    100% {
-      transform: translate(0, 0) rotate(0);
-    }
+  #show:hover {
+    z-index: 1;
+    -webkit-transform: scale(1.5);
+    transform: scale(1.5);
+    -webkit-animation: none;
+    animation: none;
   }
 
 </style>

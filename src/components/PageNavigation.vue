@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="padding-bottom: 20px;">
     <span class="pc" @click="to_page(1)">◀◀</span>
     <span :class="{pc:true,select:page==currentpage}" v-for="page in pages" @click="to_page(page)" :key="page">{{page}}</span>
     <span class="pc" @click="to_page(lastpage)">▶▶</span>
@@ -25,12 +25,7 @@
       to_page: function (x) {
         this.$emit('x_p', x)
       },
-      from_father: function () {
-        this.$emit('f_f', 'helloworld.vue')
-      },
     },
-    created: function () {},
-    mounted: function () {},
   }
 
 </script>

@@ -1,6 +1,8 @@
 <template>
   <div id="Home">
+    <br>
     <h1>这是首页</h1>
+    <h1>TODO</h1>
     <h1>TODO</h1>
     <h1>TODO</h1>
     <h1>TODO</h1>
@@ -17,17 +19,23 @@
     name: "Home",
     data() {
       return {
+        
       }
     },
     methods: {
-      from_father: function () {
-        this.$emit('f_f', this)
-      },
     },
-    components: {},
-    created() {},
+    created() {
+      
+    },
     mounted: function () {
       canvasTime();
+      this.$root.footLoad = true;
+    },
+    updated: function () {
+      
+    },
+    beforeDestroy: function(){
+      this.$root.footLoad = false;
     }
   };
 

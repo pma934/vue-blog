@@ -1,14 +1,19 @@
 <template>
   <header>
-    <div id="title">
-      {{title}}
+    <div class="title">
+      {{GLOBAL.github_username}}的个人主页
     </div>
-    <div id="navigation">
+    <button class="nav_btn" v-if="!$root.isPC" @click="show">
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+      <span class="icon-bar"></span>
+    </button>
+    <div :class="{navigation:1,navInPho:!$root.isPC}" v-show="$root.isPC||nav_show">
       <router-link class="router" to="/homepage" active-class="active-router">首页</router-link>
       <router-link class="router" to="/blog" active-class="active-router">博客</router-link>
       <router-link class="router" to="/helloWorld" active-class="active-router">测试</router-link>
     </div>
-    <div id="search"></div>
   </header>
 </template>
 
@@ -17,31 +22,66 @@
     name: 'Header',
     data() {
       return {
-        title: "围巾落地冻成狗"
+        nav_show: false,
       }
     },
+    methods: {
+      show: function () {
+        this.nav_show = !this.nav_show;
+      }
+    }
   }
 
 </script>
 
 <style scoped>
   header {
-    background: rgba(255, 255, 255, 0.7);
-    display: flex;
-    line-height: 3em;
+    background: white;
+    line-height: 2em;
     box-shadow: 0px -5px 20px 1px #666;
+    height: 35px;
   }
-  #title{
+
+  .title {
+    font-size: 1.5em;
+    font-weight: bold;
+  }
+
+  .nav_btn {
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    position: absolute;
+    top: 1px;
+    right: 10px;
+    background-color: white;
+  }
+
+   .nav_btn:focus {
+     background-color: #eee;
+  }
+
+  .nav_btn span {
+    display: block;
+    width: 22px;
+    height: 2px;
+    border-radius: 1px;
+    background-color: #888;
+    margin: 4px 0;
+  }
+
+  .navigation {
+    position: absolute;
+    top: 0px;
+    right: calc(50% - 150px);
     width: 300px;
     text-align: center;
-    font-size: 32px;
+    background-color: white
   }
-  #navigation {
-    flex-grow: 1;
-    text-align: center;
-  }
-  #search{
-    width: 350px
+
+  .navInPho {
+    width: 100px;
+    right: 0;
+    top: 35px;
   }
 
   .router {
@@ -53,6 +93,7 @@
     position: relative;
   }
 
+  /* 
   .active-router {
     color: #FE9600;
   }
@@ -64,7 +105,6 @@
             color: #FE9600;
             text-shadow: 2px 2px 4px #666;
             top: -2px;
-            animation: move 1s infinite;
         }
 
         @keyframes move {
@@ -79,6 +119,6 @@
             80%  {left: 3px;}
             90%  {left: 2px;}
             100% {left: 1px;}
-        }
+        } */
 
 </style>

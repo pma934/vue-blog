@@ -1,10 +1,10 @@
 <template>
   <div id="App">
-    <!-- <img id="bgi" src="./assets/imgs/1.jpg"> -->
+    <img id="bgi" :src='url' v-if="$root.isPC">
     <app-header></app-header>
-    <router-view @f_f="from_father" class="router-view"></router-view>
-    <!-- <live2d style="position: fixed;right: -50px;bottom: 0px;"></live2d> -->
-    <app-footer></app-footer>
+    <router-view :style="{minHeight: min_height + 'px'}" class="router-view"></router-view>
+    <live2d @swbg="Switch_background" v-if="$root.isPC" style="position: fixed;right: -50px;bottom: 0px;"></live2d>
+    <app-footer v-show="$root.footLoad"></app-footer>
   </div>
 </template>
 
@@ -16,21 +16,36 @@
   export default {
     name: "App",
     data() {
-      return {};
+      return {
+        url: this.GLOBAL.bgiUrl[Math.floor(Math.random() * this.GLOBAL.bgiUrl.length)],
+        min_height: window.innerHeight - 35 - 30,
+        timer: true,
+      };
     },
     methods: {
-      from_father: function (x) {
-        console.log("当前页面$vue");
-        console.log(x);
-        console.log("主页面$vue");
-        console.log(this);
+      Switch_background: function (x) {
+        this.url = this.GLOBAL.bgiUrl[Math.floor(Math.random() * this.GLOBAL.bgiUrl.length)]
       }
     },
     components: {
       "app-header": Header,
       "app-footer": Footer,
       "live2d": Live2D
-    }
+    },
+    mounted: function () {
+      let _onresize = window.onresize
+      let that = this
+      window.onresize = function () {
+        if (that.timer) {
+          that.timer = false
+          setTimeout(function () {
+            that.timer = true
+            that.min_height = window.innerHeight - 35 - 30
+          }, 500)
+        }
+        return _onresize()
+      }
+    },
   };
 
 </script>
@@ -47,7 +62,7 @@
     position: fixed;
     top: 0px;
     z-index: -999;
-    opacity: 0.1;
+    opacity: 0.3;
     width: 100%;
     float: left;
   }

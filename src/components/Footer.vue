@@ -1,6 +1,6 @@
 <template>
     <footer>
-        <h1>{{title}}</h1>
+        <a href="https://github.com/pma934">github.com/pma934</a>
     </footer>
 </template>
 
@@ -17,15 +17,14 @@ export default{
 
 <style scoped>
 footer{
-    background: rgba(255, 255, 255, 0.7);;
+    background: #333;
     padding: 6px;
-    font-family: "Avenir", Helvetica, Arial, sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
     text-align: center;
     word-wrap:break-word;
 }
-h1{
-    color:lawngreen;
+footer a{
+    color: white;
+    cursor: pointer;
+    text-decoration: none;
 }
 </style>
