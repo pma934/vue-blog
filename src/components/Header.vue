@@ -9,6 +9,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
+    <img :src="'https://avatars1.githubusercontent.com/u/' + $root.loginId">
     <div :class="{navigation:1,navInPho:!$root.isPC}" v-show="$root.isPC||nav_show">
       <router-link class="router" to="/homepage" active-class="active-router">首页</router-link>
       <router-link class="router" to="/blog" active-class="active-router">博客</router-link>
@@ -69,6 +70,14 @@
     margin: 4px 0;
   }
 
+  img{
+    border-radius: 2em;
+    position: absolute;
+    top: 1px;
+    right: 60px;
+    width: 2em;
+  }
+
   .navigation {
     position: absolute;
     top: 0px;
@@ -93,32 +102,8 @@
     position: relative;
   }
 
-  /* 
+   
   .active-router {
     color: #FE9600;
   }
-
-   .active-router::before {
-            content: "🌫";
-            position: absolute;
-            font-size: 2em;
-            color: #FE9600;
-            text-shadow: 2px 2px 4px #666;
-            top: -2px;
-        }
-
-        @keyframes move {
-            0%   {left: 1px;}
-            10%  {left: 2px;}
-            20%  {left: 3px;}
-            30%  {left: 4px;}
-            40%  {left: 5px;}
-            50%  {left: 6px;}
-            60%  {left: 5px;}
-            70%  {left: 4px;}
-            80%  {left: 3px;}
-            90%  {left: 2px;}
-            100% {left: 1px;}
-        } */
-
 </style>

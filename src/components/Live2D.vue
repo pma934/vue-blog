@@ -27,11 +27,14 @@
     data() {
       return {
         showlive2d: true,
+        num:Number(this.$cookie.get("live2Dmodel")),
       }
     },
     methods: {
       pio: function () {
-        let Model = live2dModel();
+        this.$cookie.set("live2Dmodel",this.num++)
+        console.log(this.num)
+        let Model = live2dModel(this.num);
         window.Live2D_img_path = Model.img
         loadlive2d("live2d_canvas", Model.model);
       },
@@ -62,7 +65,7 @@
     height: 400px;
     position: relative;
     cursor: pointer;
-    overflow: hidden;
+    /* overflow: hidden; */
   }
 
   .buttons {

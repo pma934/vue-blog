@@ -2,7 +2,7 @@
   <div id="App">
     <img id="bgi" :src='url' v-if="$root.isPC">
     <app-header></app-header>
-    <router-view :style="{minHeight: min_height + 'px'}" class="router-view"></router-view>
+    <router-view :style="{minHeight: min_height + 'px'}"  :class="{router_view:1,rvInPho:!$root.isPC}"></router-view>
     <live2d @swbg="Switch_background" v-if="$root.isPC" style="position: fixed;right: -50px;bottom: 0px;"></live2d>
     <app-footer v-show="$root.footLoad"></app-footer>
   </div>
@@ -41,7 +41,7 @@
           setTimeout(function () {
             that.timer = true
             that.min_height = window.innerHeight - 35 - 30
-          }, 500)
+          }, 50)
         }
         return _onresize()
       }
@@ -67,12 +67,28 @@
     float: left;
   }
 
-  .router-view {
+  .router_view {
     max-width: 860px;
     padding: 0 10px;
     margin-left: auto;
     margin-right: auto;
     background-color: rgba(255, 255, 255, .8);
+    position: relative;
+    right: 50px;
+  }
+
+   .router_view {
+    max-width: 860px;
+    padding: 0 10px;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: rgba(255, 255, 255, .8);
+    position: relative;
+    right: 10px;
+  }
+
+  .rvInPho{
+    position: static;
   }
 
 </style>

@@ -11,7 +11,7 @@
           <div class="dian">
             <router-link :to='"/blog/"+blog.number'>···</router-link>
           </div>
-          <span class="creatTime">{{blog.created_at.slice(0,10)}}</span>
+          <span class="creatTime">{{blog.created_at.slice(0,10)|myformatTime}}</span>
           <span class="labels">
             <span v-for="(label,key) in blog.labels" :key="key"> {{label.name}}</span>
           </span>

@@ -17,7 +17,7 @@
         owner: {
           "development": "pma934",
           "production": window.location.pathname,
-        }
+        },
       }
     },
     methods: {
@@ -32,17 +32,19 @@
         })
       },
       setHistoryRoute: function () {
-        this.$cookie.set("history_route", window.location.href)
+        this.$cookie.set("history_route", window.location.hash)
       }
     },
     beforeCreate: function () {},
     created: function () {},
     beforeMount: function () {},
     mounted: function () {
-       this.$root.footLoad = true;
+       this.test="updated 测试"
     },
     beforeUpdate: function () {},
-    updated: function () {},
+    updated: function () {
+      this.$root.footLoad = true;
+    },
     beforeDestroy: function () {
        this.$root.footLoad = false;
     },
