@@ -4,6 +4,7 @@
     <app-header></app-header>
     <router-view :style="{minHeight: min_height + 'px'}"  :class="{router_view:1,rvInPho:!$root.isPC}"></router-view>
     <live2d @swbg="Switch_background" v-if="$root.isPC" style="position: fixed;right: -50px;bottom: 0px;"></live2d>
+    <login-block></login-block>
     <app-footer v-show="$root.footLoad"></app-footer>
   </div>
 </template>
@@ -12,6 +13,7 @@
   import Header from "./components/Header";
   import Footer from "./components/Footer";
   import Live2D from "./components/Live2D";
+  import LoginBlock from "./components/LoginBlock";
 
   export default {
     name: "App",
@@ -30,7 +32,8 @@
     components: {
       "app-header": Header,
       "app-footer": Footer,
-      "live2d": Live2D
+      "live2d": Live2D,
+      "login-block":LoginBlock,
     },
     mounted: function () {
       let _onresize = window.onresize

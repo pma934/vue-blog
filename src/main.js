@@ -80,6 +80,7 @@ new Vue({
       isPC: !navigator.userAgent.match(/(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i),
       footLoad:false,
       loginId:0,
+      showlogin:false,
     }
   },
   computed: {
@@ -109,10 +110,12 @@ new Vue({
     },
     usermes:function(){
       this.$http.get(`https://api.github.com/user?access_token=${this.access_token}`).then(data => {
-        console.log(data.body)
+        // console.log(data.body)
         this.loginId = data.body.id
       }, error => {
         console.log(error)
+        this.access_token = ''
+        this.$cookie.delete("access_token")
       })
     }
   },

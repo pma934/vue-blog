@@ -27,13 +27,12 @@
     data() {
       return {
         showlive2d: true,
-        num:Number(this.$cookie.get("live2Dmodel")),
+        num: Number(this.$cookie.get("live2Dmodel")),
       }
     },
     methods: {
       pio: function () {
-        this.$cookie.set("live2Dmodel",this.num++)
-        console.log(this.num)
+        this.$cookie.set("live2Dmodel", this.num++)
         let Model = live2dModel(this.num);
         window.Live2D_img_path = Model.img
         loadlive2d("live2d_canvas", Model.model);
@@ -43,7 +42,10 @@
         window.Live2D.captureFrame = true;
       },
       gotop: function () {
-        scrollTo(0, 0)
+        scrollTo({
+          top: 0,
+          behavior: "smooth"
+        });
       },
       toggle: function () {
         this.showlive2d = !this.showlive2d

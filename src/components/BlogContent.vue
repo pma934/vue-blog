@@ -22,9 +22,17 @@
         </div>
       </div>
       <p v-if="!comments.length">暂时还没有回复，客官要不要来回复一个=-=</p>
-      <page-navigation v-show="comment_lastpage!==1" @x_p="comment_x_page" :lastpage="comment_lastpage" :currentpage="comment_currentpage"></page-navigation>
-      <div class="not_logged">
-        <a>授权登录</a> 或者跳转到博客的 <a :href="blogMessage.html_url">github源地址</a> 进行回复！
+      <page-navigation v-if="comment_lastpage!==1" @x_p="comment_x_page" :lastpage="comment_lastpage" :currentpage="comment_currentpage"></page-navigation>
+      <div class="not_logged" v-if="!$root.access_token">
+        <a @click="login()" :src="'https://avatars1.githubusercontent.com/u/' + $root.loginId">授权登录</a> 或者跳转到博客的 <a
+          :href="blogMessage.html_url">github源地址</a> 进行回复！
+      </div>
+      <div v-if="$root.access_token" class="commentbody">
+        <textarea placeholder="既然登录了，回复点什么呗~" v-model="textarea"></textarea>
+        <div class="commentbtn">
+          <span>没得图床，发不了图片，要发图片去<a :href="blogMessage.html_url">github源地址</a>回复吧。</span>
+          <button @click="comment">Comment</button>
+        </div>
       </div>
       <br>
     </div>
@@ -59,6 +67,7 @@
         comment_lastpage: 1,
         comment_currentpage: 1,
         loaded: false,
+        textarea: '',
       }
     },
     computed: {
@@ -75,11 +84,20 @@
       },
       comment_x_page: function (x) {
         this.$http.get(
-          `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues/${this.$route.params.number}/comments?per_page=${this.GLOBAL.github_percomments}&page=${x}&${this.$root._access_token}`
+          `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues/${this.$route.params.number}/comments?r=${Math.random()}&per_page=${this.GLOBAL.github_percomments}&page=${x}&${this.$root._access_token}`
         ).then(
           data => {
+            console.log(data)
             this.comments = data.body;
             this.comment_currentpage = x;
+            if (data.headers.map.link !== undefined) {
+              let link = data.headers.map.link[0];
+              let re = /&page=(\d+)[&\w/_=]*>; rel="last"/;
+              try {
+                this.comment_lastpage = Number(re.exec(link)[1])
+              } catch (e) {}
+              console.log(this.comment_lastpage)
+            }
           });
       },
       add_joggle: function (e) {
@@ -87,6 +105,19 @@
       },
       del_joggle: function (e) {
         e.currentTarget.previousElementSibling.firstChild.removeAttribute('class', 'joggle')
+      },
+      login: function () {
+        this.$root.showlogin = true
+      },
+      comment: function () {
+        this.$http.post(
+          `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues/${this.$route.params.number}/comments?${this.$root._access_token}`, {
+            body: this.textarea
+          }
+        ).then(data => {
+          this.comment_x_page(this.comment_currentpage)
+        });
+        this.textarea = ''
       }
     },
     components: {
@@ -102,7 +133,7 @@
         this.loaded = true;
       });
       this.$http.get(
-        `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues/${this.$route.params.number}/comments?per_page=${this.GLOBAL.github_percomments}&page=1&${this.$root._access_token}`
+        `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues/${this.$route.params.number}/comments?r=${Math.random()}&per_page=${this.GLOBAL.github_percomments}&page=1&${this.$root._access_token}`
       ).then(data => {
         this.comments = data.body
         if (data.headers.map.link !== undefined) {
@@ -249,6 +280,40 @@
     background-image: none;
     border-color: rgba(27, 31, 35, .5);
     box-shadow: inset 0 0.15em 0.3em rgba(27, 31, 35, .15);
+  }
+
+  .commentbody {
+    max-width: 600px;
+    margin: auto;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #d1d5da;
+    border-radius: 3px;
+  }
+
+  .commentbody textarea {
+    max-height: 500px;
+    min-height: 100px;
+    resize: vertical;
+    width: 100%;
+    padding: 10px;
+    box-sizing: border-box;
+    background-color: #fafbfc;
+    border-radius: 3px;
+  }
+
+  .commentbtn span {
+    font-size: 0.5em;
+    color: gray;
+  }
+
+  .commentbtn button {
+    background-image: linear-gradient(-180deg, #34d058, #28a745 90%);
+    color: #fff;
+    padding: 6px 12px;
+    border-radius: .25em;
+    cursor: pointer;
+    outline: none;
   }
 
 </style>

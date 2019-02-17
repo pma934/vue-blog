@@ -9,7 +9,7 @@
       <span class="icon-bar"></span>
       <span class="icon-bar"></span>
     </button>
-    <img :src="'https://avatars1.githubusercontent.com/u/' + $root.loginId">
+    <img @click="login()" :src="'https://avatars1.githubusercontent.com/u/' + $root.loginId">
     <div :class="{navigation:1,navInPho:!$root.isPC}" v-show="$root.isPC||nav_show">
       <router-link class="router" to="/homepage" active-class="active-router">首页</router-link>
       <router-link class="router" to="/blog" active-class="active-router">博客</router-link>
@@ -29,6 +29,9 @@
     methods: {
       show: function () {
         this.nav_show = !this.nav_show;
+      },
+      login: function () {
+        this.$root.showlogin = true
       }
     }
   }
@@ -57,8 +60,8 @@
     background-color: white;
   }
 
-   .nav_btn:focus {
-     background-color: #eee;
+  .nav_btn:focus {
+    background-color: #eee;
   }
 
   .nav_btn span {
@@ -70,12 +73,17 @@
     margin: 4px 0;
   }
 
-  img{
+  img {
     border-radius: 2em;
     position: absolute;
     top: 1px;
     right: 60px;
     width: 2em;
+    cursor: pointer;
+  }
+
+  img:hover{
+    animation: joggle 1s;
   }
 
   .navigation {
@@ -102,8 +110,9 @@
     position: relative;
   }
 
-   
+
   .active-router {
     color: #FE9600;
   }
+
 </style>
