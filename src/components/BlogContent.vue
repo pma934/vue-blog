@@ -87,7 +87,6 @@
           `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues/${this.$route.params.number}/comments?r=${Math.random()}&per_page=${this.GLOBAL.github_percomments}&page=${x}&${this.$root._access_token}`
         ).then(
           data => {
-            console.log(data)
             this.comments = data.body;
             this.comment_currentpage = x;
             if (data.headers.map.link !== undefined) {
@@ -96,7 +95,6 @@
               try {
                 this.comment_lastpage = Number(re.exec(link)[1])
               } catch (e) {}
-              console.log(this.comment_lastpage)
             }
           });
       },
@@ -132,17 +130,7 @@
         document.title = data.body.title
         this.loaded = true;
       });
-      this.$http.get(
-        `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues/${this.$route.params.number}/comments?r=${Math.random()}&per_page=${this.GLOBAL.github_percomments}&page=1&${this.$root._access_token}`
-      ).then(data => {
-        this.comments = data.body
-        if (data.headers.map.link !== undefined) {
-          let link = data.headers.map.link[0];
-          let re = /&page=(\d+)[&\w/_=]*>; rel="last"/;
-          this.comment_lastpage = Number(re.exec(link)[1])
-        }
-      });
-
+      this.comment_x_page(1)
     },
     mounted: function () {},
     updated: function () {

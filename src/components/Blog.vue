@@ -39,11 +39,18 @@
       x_page: function (x) {
         this.$http.get(
           `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues?labels=blog&state=open&per_page=${this.GLOBAL.github_perpage}&page=${x}&${this.$root._access_token}`
-        ).then(
-          data => {
-            this.bloglist = data.body.map(this.decorateBlog);
-            this.currentpage = x;
-          });
+        ).then(data => {
+          this.bloglist = data.body.map(this.decorateBlog);
+          this.currentpage = x;
+          if (data.headers.map.link !== undefined) {
+            let link = data.headers.map.link[0];
+            let re = /&page=(\d+)[&\w/_=]*>; rel="last"/;
+            try {
+            this.lastpage = Number(re.exec(link)[1])
+            }catch(e){}
+          }
+          this.blogLoaded = true;
+        });
       },
       decorateBlog: function (blog) {
         var meta, metaStr;
@@ -68,19 +75,7 @@
       "page-navigation": PageNavigation,
     },
     created: function () {
-      this.$http.get(
-        `https://api.github.com/repos/${this.GLOBAL.github_username}/${this.GLOBAL.github_username}.github.io/issues?labels=blog&state=open&per_page=${this.GLOBAL.github_perpage}&page=1&${this.$root._access_token}`
-      ).then(
-        data => {
-          this.bloglist = data.body.map(this.decorateBlog);
-          if (data.headers.map.link !== undefined) {
-            let link = data.headers.map.link[0];
-            let re = /&page=(\d+)[&\w/_=]*>; rel="last"/;
-            this.lastpage = Number(re.exec(link)[1])
-          }
-          this.blogLoaded = true;
-
-        });
+      this.x_page(1)
     },
     updated: function () {
       this.$root.footLoad = true;
